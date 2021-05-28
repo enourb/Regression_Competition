@@ -115,20 +115,11 @@ testing <- testing %>%
   )
 
 final_predict <- loan_model_stack %>%
-  predict(testing)
+  predict(testing) %>%
+  bind_cols(testing %>% select(id)) %>%
+  rename(Predicted = .pred) %>%
+  rename(Id = id) %>%
+  select(Id, Predicted)
 
 
-write.csv(final_predict, file = "data/temp_02/test_pred.csv")
-
-## Just Keras
-
-final_workflow_tuned <- keras_workflow %>%
-  finalize_workflow(select_best(keras_tune, metric = "rmse"))
-
-final_results <- fit(final_workflow_tuned, loan_train)
-
-
-final_predict2 <- predict(final_results, new_data = testing)
-
-
-write.csv(final_predict2, file = "data/temp_02/test_pred2.csv")
+write.csv(final_predict, file = "data/temp_02/test_pred.csv", row.names = FALSE)

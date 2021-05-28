@@ -2,6 +2,7 @@ library(tidymodels)
 library(tidyverse)
 library(skimr)
 library(lubridate)
+set.seed(333)
 
 load("data/loan.rda")
 
@@ -73,4 +74,4 @@ final_predict <- predict(final_results, new_data = test) %>%
   select(Id, Predicted)
 
 
-write.csv(final_predict, file = "data/temp_01/test_pred.csv")
+write.csv(final_predict, file = "data/temp_01/test_pred.csv", row.names = FALSE)

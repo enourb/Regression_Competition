@@ -27,7 +27,7 @@ loan_recipe <- recipe(money_made_inv ~
   step_normalize(all_predictors())
 
 
-# significantly smaller than previous attempts
+# significantly smaller amount of variables than previous attempts
 skim_without_charts(loan_recipe %>%
                       prep(loan_train) %>%
                       bake(new_data = NULL))
@@ -36,6 +36,7 @@ save(loan_fold, loan_recipe, loan_split, loan_train, file = "data/temp_05/loan_s
 
 
 load("data/temp_05/rf_tune.rda")
+
 
 final_workflow_tuned <- rf_workflow %>%
   finalize_workflow(select_best(rf_tune, metric = "rmse"))
@@ -49,6 +50,7 @@ rf_tune %>%
   filter(.metric == "rmse") %>%
   slice_min(mean)
 
+# similar results to previous tune, but hopefully less overfitting since fewer variables
 rf_tune %>%
   autoplot(metric = "rmse")
 
